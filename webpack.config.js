@@ -50,7 +50,8 @@ module.exports = (options = {}) => ({
   ],
   resolve: {
     alias: {
-      '~': resolve(__dirname, 'src')
+      '~': resolve(__dirname, 'src'),
+      'vue': 'vue/dist/vue.js'
     }
   },
   devServer: {
@@ -58,7 +59,7 @@ module.exports = (options = {}) => ({
     port: 8010,
     proxy: {
       '/api/': {
-        target: 'http://127.0.0.1:8080',
+        target: 'http://127.0.0.1:3000',
         changeOrigin: true,
         pathRewrite: {
           '^/api': ''

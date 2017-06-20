@@ -1,11 +1,17 @@
 import Vue from 'vue'
 import ElementUI from 'element-ui'
-import 'element-ui/lib/theme-default/index.css'
-import App from './App.vue'
 
+import axios from 'axios'
+import VueAxios from 'vue-axios'
+Vue.use(VueAxios, axios)
+
+import MyHeader from './Header.vue'
+import router from './router'
+
+import 'element-ui/lib/theme-default/index.css'
 Vue.use(ElementUI)
 
 new Vue({
-  el: '#app',
-  render: h => h(App)
-})
+  router,
+  components: { MyHeader }
+}).$mount('#app')
