@@ -9,6 +9,8 @@ import MyHeader from './Header.vue'
 import router from './router'
 
 import 'element-ui/lib/theme-default/index.css'
+import './assets/index.css'
+
 Vue.use(ElementUI)
 
 new Vue({
