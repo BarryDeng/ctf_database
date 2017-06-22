@@ -12,7 +12,7 @@
         </div>
       </el-col>
       <el-col :xs="8" :sm="12" :md="16" :lg="18">
-        <div class="grid-content bg-purple" :default-sort = "{prop: 'date', order: 'descending'}">
+        <div class="grid-content bg-purple" :default-sort="{prop: 'date', order: 'descending'}">
           <el-table :data="tableData3" height="500" border style="width: 100%">
             <el-table-column prop="date" label="日期" width="180" sortable>
             </el-table-column>
@@ -176,7 +176,7 @@ export default {
             title: '失败了！',
             message: response.data.msg,
             duration: 3000
-          })
+          });
         }
 
       });
@@ -206,8 +206,8 @@ export default {
     DeleteClick(index) {
       this.$confirm('确定删除 ' + this.tableData3[index].name + " 中队伍 " + this.tableData3[index].team + "的成绩吗？")
         .then(_ => {
-          this.tableData3.splice(index, 1);
           this.DeleteRecord(this.tableData3[index].name, this.tableData3[index].team);
+          this.tableData3.splice(index, 1);
         })
         .catch(_ => { });
     },

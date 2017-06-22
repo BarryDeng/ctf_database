@@ -10,7 +10,7 @@
         </div>
       </el-col>
       <el-col :xs="8" :sm="12" :md="16" :lg="18">
-        <div class="grid-content bg-purple" :default-sort = "{prop: 'date', order: 'descending'}">
+        <div class="grid-content bg-purple" :default-sort="{prop: 'date', order: 'descending'}">
           <el-table :data="tableData3" height="500" border style="width: 100%">
             <el-table-column prop="id" label="战队序号" width="180" sortable>
             </el-table-column>
@@ -18,7 +18,7 @@
             </el-table-column>
             <el-table-column prop="loc" label="城市">
             </el-table-column>
-            <el-table-column prop="university" label="学校">
+            <el-table-column prop="school" label="学校">
             </el-table-column>
             <el-table-column prop="teacher" label="指导老师">
             </el-table-column>
@@ -49,40 +49,54 @@
     </el-dialog>
     <el-dialog title="更改信息" :visible.sync="dialogEditVisible">
       <el-form :model="form">
-        <el-form-item label="比赛名称" :label-width="formLabelWidth">
-          <el-input v-model="form.com" auto-complete="off" :disabled="true"></el-input>
+        <el-form-item label="战队ID" :label-width="formLabelWidth">
+          <el-input v-model="form.id" auto-complete="off" :disabled="true"></el-input>
         </el-form-item>
-        <el-form-item label="战队名称" :label-width="formLabelWidth" :disabled="true">
-          <el-select v-model="form.team" placeholder="Please select a zone" :disabled="true">
-            <el-option label="Cr4ck1ng" value="Cr4ck1ng"></el-option>
-            <el-option label="Asuri" value="Asuri"></el-option>
-          </el-select>
+        <el-form-item label="战队名称" :label-width="formLabelWidth">
+          <el-input v-model="form.name" auto-complete="off"></el-input>
         </el-form-item>
-        <el-form-item label="分数" :label-width="formLabelWidth">
-          <el-input v-model="form.score" auto-complete="off"></el-input>
+        <el-form-item label="战队位置" :label-width="formLabelWidth">
+          <el-input v-model="form.loc" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="战队学校" :label-width="formLabelWidth">
+          <el-input v-model="form.school" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="指导老师" :label-width="formLabelWidth">
+          <el-input v-model="form.teacher" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="成员数量" :label-width="formLabelWidth">
+          <el-input v-model="form.person" auto-complete="off"></el-input>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogEditVisible = false">Cancel</el-button>
-        <el-button type="primary" @click="EditRecord">Confirm</el-button>
+        <el-button @click="dialogEditVisible = false">取消</el-button>
+        <el-button type="primary" @click="EditRecord">确认</el-button>
       </span>
     </el-dialog>
     <el-dialog title="新建记录" :visible.sync="dialogNewVisible">
       <el-form :model="newform">
-        <el-form-item label="比赛名称" :label-width="formLabelWidth">
-          <el-input v-model="newform.com" auto-complete="off"></el-input>
+        <el-form-item label="战队ID" :label-width="formLabelWidth">
+          <el-input v-model="newform.id" auto-complete="off" :disabled="true"></el-input>
         </el-form-item>
         <el-form-item label="战队名称" :label-width="formLabelWidth">
-          <el-input v-model="newform.team" auto-complete="off">
-          </el-input>
+          <el-input v-model="newform.name" auto-complete="off"></el-input>
         </el-form-item>
-        <el-form-item label="分数" :label-width="formLabelWidth">
-          <el-input v-model="newform.score" auto-complete="off"></el-input>
+        <el-form-item label="战队位置" :label-width="formLabelWidth">
+          <el-input v-model="newform.loc" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="战队学校" :label-width="formLabelWidth">
+          <el-input v-model="newform.school" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="指导老师" :label-width="formLabelWidth">
+          <el-input v-model="newform.teacher" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="成员数量" :label-width="formLabelWidth">
+          <el-input v-model="newform.person" auto-complete="off"></el-input>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">Cancel</el-button>
-        <el-button type="primary" @click="NewRecord">Confirm</el-button>
+        <el-button @click="dialogFormVisible = false">取消</el-button>
+        <el-button type="primary" @click="NewRecord">确认</el-button>
       </span>
     </el-dialog>
   </div>
@@ -100,28 +114,41 @@ export default {
       dialogVisible: false,
       dialogEditVisible: false,
       form: {
-        com: '',
-        team: '',
-        score: ''
+        id: '',
+        name: '',
+        loc: '',
+        teacher: '',
+        school: '',
+        person: ''
       },
       newform: {
-        com: '',
-        team: '',
-        score: ''
+        name: '',
+        loc: '',
+        teacher: '',
+        school: '',
+        person: ''
       },
       formLabelWidth: '120px'
     }
   },
 
   created() {
-    this.axios.get('/api/team').then((response) => {
-      // console.log(response.data);
+    let params = {};
+    if (window.location.pathname === "/team/2") params.type = 2;
+    this.axios.get('/api/team', { params: params }).then((response) => {
       this.tableData3 = response.data;
     });
   },
   methods: {
     NewRecord() {
-      let data = { com: this.newform.com, team: this.newform.team, score: this.newform.score };
+      let data = {
+        name: this.newform.name,
+        school: this.newform.school,
+        loc: this.newform.loc,
+        teacher: this.newform.teacher,
+        person: this.newform.person
+
+      };
       this.axios.post('/api/newteam', data).then((response) => {
         console.log(response.data);
         if (response.data.status === 0) {
@@ -138,11 +165,21 @@ export default {
             duration: 3000
           })
         }
-
+        this.axios.get('/api/team').then((response) => {
+          this.tableData3 = response.data;
+        });
       });
     },
     EditRecord() {
-      let data = { com: this.form.com, team: this.form.team, score: this.form.score };
+      let data = {
+        id: this.form.id,
+        name: this.form.name,
+        school: this.form.school,
+        loc: this.form.loc,
+        teacher: this.form.teacher,
+        person: this.form.person
+
+      };
       this.axios.post('/api/editteam', data).then((response) => {
         console.log(response.data);
         if (response.data.status === 0) {
@@ -159,11 +196,13 @@ export default {
             duration: 3000
           })
         }
-
+        this.axios.get('/api/team').then((response) => {
+          this.tableData3 = response.data;
+        });
       });
     },
-    DeleteRecord(com, team) {
-      let data = { com: com, team: team };
+    DeleteRecord(id) {
+      let data = { id: id };
       this.axios.post('/api/deleteteam', data).then((response) => {
         console.log(response.data);
         if (response.data.status === 0) {
@@ -185,7 +224,6 @@ export default {
     handleIconClick(ev) {
       // console.log(ev);
       let cond = {};
-      if (this.comFilter !== '') cond.CNAME = this.comFilter;
       if (this.teamFilter !== '') cond.TNAME = this.teamFilter;
       this.axios.get('/api/team', { params: cond }).then((response) => {
         console.log(response.data);
@@ -196,19 +234,22 @@ export default {
       this.dialogNewVisible = true;
     },
     EditClick(index) {
-      this.form.com = this.tableData3[index].name;
-      this.form.team = this.tableData3[index].team;
-      this.form.score = this.tableData3[index].score;
+      this.form.id = this.tableData3[index].id;
+      this.form.name = this.tableData3[index].name;
+      this.form.school = this.tableData3[index].school;
+      this.form.loc = this.tableData3[index].loc;
+      this.form.teacher = this.tableData3[index].teacher;
+      this.form.person = this.tableData3[index].person;
       this.dialogEditVisible = true;
     },
     InfoClick(index) {
       this.dialogVisible = true;
     },
     DeleteClick(index) {
-      this.$confirm('确定删除 ' + this.tableData3[index].name + " 中队伍 " + this.tableData3[index].team + "的成绩吗？")
+      this.$confirm('确定删除 ' + this.tableData3[index].name + "吗？")
         .then(_ => {
+          this.DeleteRecord(this.tableData3[index].id);
           this.tableData3.splice(index, 1);
-          this.DeleteRecord(this.tableData3[index].name, this.tableData3[index].team);
         })
         .catch(_ => { });
     },
